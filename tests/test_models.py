@@ -1,7 +1,4 @@
-import pytest
-from src.models import Product, Category
-
-from src.models import Category
+from src.models import Category, Product
 
 
 def test_product_init(sample_products):
@@ -28,7 +25,6 @@ def test_add_product_increases_count(sample_category):
     assert Category.product_count == initial_count + 1
 
 
-
 def test_products_getter_format(sample_category):
     result = sample_category.products
     assert "Телефон" in result
@@ -42,7 +38,7 @@ def test_new_product_creates_new():
         "name": "Планшет",
         "description": "10-дюймовый экран",
         "price": 25000.0,
-        "quantity": 4
+        "quantity": 4,
     }
     new_p = Product.new_product(data, product_list)
     assert isinstance(new_p, Product)

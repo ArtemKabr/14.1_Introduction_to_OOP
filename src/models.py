@@ -36,7 +36,9 @@ class Product:
         self.__price = new_price
 
     @classmethod
-    def new_product(cls, product_data: dict, existing_products: list["Product"]) -> "Product":
+    def new_product(
+        cls, product_data: dict, existing_products: list["Product"]
+    ) -> "Product":
         """
         Создаёт или обновляет товар. При совпадении названия — обновляет количество и цену.
 
@@ -55,9 +57,8 @@ class Product:
             name=product_data["name"],
             description=product_data["description"],
             price=product_data["price"],
-            quantity=product_data["quantity"]
+            quantity=product_data["quantity"],
         )
-
 
 
 class Category:
@@ -93,5 +94,3 @@ class Category:
             for product in self.__products
         ]
         return "\n".join(product_lines)
-
-
