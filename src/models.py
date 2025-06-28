@@ -1,5 +1,5 @@
 class Product:
-    """Класс, представляющий товар."""
+    """Класс, описывающий товар."""
 
     def __init__(
         self, name: str, description: str, price: float, quantity: int
@@ -8,6 +8,20 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+
+    def __str__(self) -> str:
+        """
+        Возвращает строковое представление товара.
+        """
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """
+        Возвращает сумму стоимостей товаров на складе при сложении двух продуктов.
+        """
+        if not isinstance(other, Product):
+            return NotImplemented
+        return self.price * self.quantity + other.price * other.quantity
 
     @property
     def price(self) -> float:
@@ -62,10 +76,10 @@ class Product:
 
 
 class Category:
-    """Класс, представляющий категорию товаров."""
+    """Класс, описывает категорию товаров."""
 
-    category_count = 0
-    product_count = 0
+    category_count = 0  # количество категорий
+    product_count = 0  # общее количество всех товаров во всех категориях
 
     def __init__(self, name: str, description: str, products: list[Product]) -> None:
         self.name = name
@@ -73,7 +87,7 @@ class Category:
         self.__products = products
 
         Category.category_count += 1
-        Category.product_count += len(products)
+        Category.product_count += sum(p.quantity for p in products)
 
     def add_product(self, product: Product) -> None:
         """
@@ -82,6 +96,13 @@ class Category:
         """
         self.__products.append(product)
         Category.product_count += 1
+
+    def __str__(self) -> str:
+        """
+        Возвращает строковое представление категории с общим количеством всех товаров.
+        """
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     @property
     def products(self) -> str:
@@ -94,3 +115,9 @@ class Category:
             for product in self.__products
         ]
         return "\n".join(product_lines)
+
+    def product_list_str(self) -> str:
+        """
+        Возвращает строку с информацией о каждом товаре.
+        """
+        return "\n".join(str(product) for product in self.__products)
