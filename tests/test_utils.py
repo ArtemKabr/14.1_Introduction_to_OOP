@@ -1,6 +1,6 @@
 import os
 
-from src.utils import load_data_from_json
+from src.utils import load_data_from_json  # Убедись, что импорт верный
 
 
 def test_load_data_from_json():
@@ -9,4 +9,7 @@ def test_load_data_from_json():
 
     assert len(categories) == 2
     assert categories[0].name == "Смартфоны"
-    assert len(categories[0].products) == 3
+
+    # проверяем количество строк (товаров) в products
+    product_lines = categories[0].products.strip().split("\n")
+    assert len(product_lines) == 3

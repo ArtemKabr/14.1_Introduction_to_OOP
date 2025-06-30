@@ -1,6 +1,7 @@
 import json
 from typing import List
-from src.models import Product, Category
+
+from src.models import Category, Product
 
 
 def load_data_from_json(file_path: str) -> List[Category]:
@@ -13,7 +14,9 @@ def load_data_from_json(file_path: str) -> List[Category]:
     categories = []
     for category_data in data:
         products = [Product(**prod) for prod in category_data["products"]]
-        category = Category(category_data["name"], category_data["description"], products)
+        category = Category(
+            category_data["name"], category_data["description"], products
+        )
         categories.append(category)
 
     return categories
