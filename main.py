@@ -1,7 +1,7 @@
 import os
 import sys
 
-from src.models import Category, Product
+from src.models import Category, LawnGrass, Product, Smartphone
 from src.utils import load_data_from_json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
@@ -91,3 +91,42 @@ if __name__ == "__main__":
     print("\n💰 Установка некорректной цены:")
     updated_product.price = -1
     updated_product.price = 0
+
+    # 📱 Создание смартфонов
+    smartphone1 = Smartphone("iPhone 15", "512GB", 210000, 4, 97.5, "15", 512, "Gray")
+    smartphone2 = Smartphone(
+        "Samsung S23", "256GB", 190000, 3, 96.2, "S23", 256, "Black"
+    )
+
+    # 🌿 Создание газонной травы
+    grass1 = LawnGrass(
+        "Газонная трава", "Элитная", 500, 10, "Россия", "5 дней", "Зеленый"
+    )
+    grass2 = LawnGrass(
+        "Газонная трава 2", "Для тени", 450, 5, "США", "7 дней", "Темно-зеленый"
+    )
+
+    # ✅ Сложение однотипных
+    print("\n✅ Сложение смартфонов:")
+    print(smartphone1 + smartphone2)
+
+    print("\n✅ Сложение трав:")
+    print(grass1 + grass2)
+
+    # ❌ Ошибка при сложении разных типов
+    print("\n❌ Попытка сложить смартфон и траву:")
+    try:
+        result = smartphone1 + grass1
+    except TypeError as e:
+        print(f"Ошибка: {e}")
+
+    # ✅ Проверка ограничения на добавление продукта
+    category_smartphones = Category("Смартфоны", "Категория", [])
+    category_smartphones.add_product(smartphone1)
+
+    # ❌ Попытка добавить строку вместо товара
+    print("\n❌ Попытка добавить не-продукт в категорию:")
+    try:
+        category_smartphones.add_product("не продукт")
+    except TypeError as e:
+        print(f"Ошибка: {e}")
