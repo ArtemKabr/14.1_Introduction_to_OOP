@@ -17,11 +17,12 @@ class Product:
 
     def __add__(self, other):
         """
-        Возвращает сумму стоимостей товаров на складе при сложении двух продуктов.
+        Складывает количество товаров на складе, если они одного класса.
+        Вызывает ошибку TypeError при попытке сложения объектов разных классов.
         """
-        if not isinstance(other, Product):
-            return NotImplemented
-        return self.price * self.quantity + other.price * other.quantity
+        if type(self) is not type(other):
+            raise TypeError("Нельзя складывать товары разных типов")
+        return self.quantity + other.quantity
 
     @property
     def price(self) -> float:
@@ -75,6 +76,52 @@ class Product:
         )
 
 
+class Smartphone(Product):
+    """
+    Класс, описывающий смартфон.
+    Наследуется от Product и добавляет характеристики смартфона.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
+    ) -> None:
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """
+    Класс, описывающий газонную траву.
+    Наследуется от Product и добавляет агрономические свойства.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        country: str,
+        germination_period: str,
+        color: str,
+    ) -> None:
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+
 class Category:
     """Класс, описывает категорию товаров."""
 
@@ -91,9 +138,11 @@ class Category:
 
     def add_product(self, product: Product) -> None:
         """
-        Добавляет продукт в приватный список товаров и увеличивает счётчик продуктов.
-        :param product: экземпляр класса Product
+        Добавляет продукт в категорию, если это экземпляр Product или его наследников.
+        Вызывает TypeError, если объект не является продуктом.
         """
+        if not isinstance(product, Product):
+            raise TypeError("Можно добавлять только продукты и их наследников")
         self.__products.append(product)
         Category.product_count += 1
 
