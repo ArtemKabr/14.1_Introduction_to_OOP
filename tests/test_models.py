@@ -1,4 +1,6 @@
-from src.models import Category, Product
+import pytest
+
+from src.models import Category, LawnGrass, Product, Smartphone
 
 
 def test_product_init(sample_products):
@@ -67,7 +69,7 @@ def test_category_str():
 def test_product_add():
     a = Product("A", "desc", 100.0, 5)
     b = Product("B", "desc", 200.0, 3)
-    assert a + b == 100.0 * 5 + 200.0 * 3
+    assert a + b == 8
 
 
 def test_new_product_updates_existing(monkeypatch):
@@ -86,3 +88,37 @@ def test_new_product_creates_new():
     assert result.name == "New Product"
     assert result.quantity == 3
     assert result.price == 150.0
+
+
+def test_add_same_type_smartphones():
+    s1 = Smartphone("iPhone 15", "desc", 100000, 5, 95.0, "15", 256, "gray")
+    s2 = Smartphone("Galaxy S23", "desc", 90000, 3, 94.0, "S23", 256, "black")
+    result = s1 + s2
+    assert result == 8
+
+
+def test_add_same_type_grass():
+    g1 = LawnGrass("Газон 1", "desc", 500, 10, "Россия", "5 дней", "Зеленый")
+    g2 = LawnGrass("Газон 2", "desc", 450, 6, "США", "7 дней", "Темно-зеленый")
+    result = g1 + g2
+    assert result == 16
+
+
+def test_add_different_types_raises():
+    s = Smartphone("iPhone", "desc", 100000, 2, 90.0, "14", 128, "white")
+    g = LawnGrass("Газон", "desc", 500, 3, "Казахстан", "4 дня", "Зеленый")
+    with pytest.raises(TypeError):
+        _ = s + g
+
+
+def test_category_add_valid_product():
+    s1 = Smartphone("iPhone", "desc", 100000, 1, 90.0, "14", 128, "white")
+    category = Category("Смартфоны", "описание", [])
+    category.add_product(s1)
+    assert s1 in category._Category__products
+
+
+def test_category_add_invalid_type_raises():
+    category = Category("Смартфоны", "описание", [])
+    with pytest.raises(TypeError):
+        category.add_product("не продукт")  # строка, не Product
