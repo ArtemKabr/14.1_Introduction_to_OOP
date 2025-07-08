@@ -4,6 +4,7 @@ import sys
 from src.models import Category, LawnGrass, Product, Smartphone
 from src.utils import load_data_from_json
 
+# Добавляем src в sys.path для импорта
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 
@@ -85,7 +86,6 @@ if __name__ == "__main__":
 
     print("\n💰 Понижение цены с подтверждением:")
     updated_product.price = 150000
-
     print(f"➡️ Текущая цена после понижения: {updated_product.price}")
 
     print("\n💰 Установка некорректной цены:")
