@@ -58,6 +58,18 @@ class Product(CreationLoggerMixin, BaseProduct):
     def __init__(
         self, name: str, description: str, price: float, quantity: int
     ) -> None:
+        """
+        Инициализация экземпляра товара с валидацией количества.
+
+        :param name: Название
+        :param description: Описание
+        :param price: Цена
+        :param quantity: Количество (должно быть > 0)
+        :raises ValueError: Если quantity <= 0
+        """
+        if quantity <= 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+
         self.name = name
         self.description = description
         self.__price = price
@@ -190,6 +202,18 @@ class Category:
         Category.category_count += 1
         Category.product_count += sum(p.quantity for p in products)
 
+    def middle_price(self) -> float:
+        """
+        Вычисляет среднюю цену товаров в категории.
+
+        :return: Средняя цена или 0.0, если товаров нет.
+        """
+        try:
+            total = sum(product.price for product in self.products)
+            return total / len(self.products)
+        except ZeroDivisionError:
+            return 0.0
+
     def add_product(self, product: Product) -> None:
         """
         Добавляет продукт в категорию, если это экземпляр Product или его наследников.
@@ -208,16 +232,12 @@ class Category:
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     @property
-    def products(self) -> str:
+    def products(self) -> list[Product]:
         """
         Геттер для приватного списка продуктов.
-        Возвращает строку с информацией о каждом продукте.
+        Возвращает список экземпляров Product.
         """
-        product_lines = [
-            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт."
-            for product in self.__products
-        ]
-        return "\n".join(product_lines)
+        return self.__products
 
     def product_list_str(self) -> str:
         """

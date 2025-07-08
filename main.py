@@ -22,6 +22,7 @@ def main() -> None:
         print(f"   Описание: {category.description}")
         print(f"   Кол-во товаров: {category.product_list_str().count(chr(10)) + 1}")
         print(category.product_list_str())
+        print(f"   Средняя цена: {category.middle_price():.2f}₽")
         print()
 
     print(f"📊 Всего категорий: {Category.category_count}")
@@ -30,6 +31,13 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+    # ❌ Попытка создать товар с нулевым количеством
+    print("\n❌ Попытка создать товар с нулевым количеством:")
+    try:
+        broken_product = Product("Бракованный товар", "Нет в наличии", 1000.0, 0)
+    except ValueError as e:
+        print(f"Ошибка: {e}")
 
     # 🔽 Демонстрация функционала:
     product1 = Product(
@@ -49,6 +57,7 @@ if __name__ == "__main__":
     )
 
     print(str(category1))
+    print(f"Средняя цена: {category1.middle_price():.2f}₽")
 
     print(product1 + product2)
     print(product1 + product3)

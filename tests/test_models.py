@@ -122,3 +122,21 @@ def test_category_add_invalid_type_raises():
     category = Category("Смартфоны", "описание", [])
     with pytest.raises(TypeError):
         category.add_product("не продукт")  # строка, не Product
+
+
+def test_product_zero_quantity_raises():
+    """
+    Проверяет, что при создании продукта с нулевым количеством возникает ValueError.
+    """
+    with pytest.raises(
+        ValueError, match="Товар с нулевым количеством не может быть добавлен"
+    ):
+        Product("Пустой", "некорректный", 1000.0, 0)
+
+
+def test_middle_price_empty_category_returns_zero():
+    """
+    Проверяет, что метод middle_price возвращает 0.0 для категории без продуктов.
+    """
+    empty_category = Category("Пустая", "без товаров", [])
+    assert empty_category.middle_price() == 0.0
