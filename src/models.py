@@ -1,4 +1,58 @@
-class Product:
+from abc import ABC, abstractmethod
+
+
+class BaseProduct(ABC):
+    """Абстрактный базовый класс для всех товаров."""
+
+    def __init__(
+        self, name: str, description: str, price: float, quantity: int
+    ) -> None:
+        self.name = name
+        self.description = description
+        self.__price = price
+        self.quantity = quantity
+
+    @property
+    def price(self) -> float:
+        """Геттер для цены товара."""
+        return self.__price
+
+    @price.setter
+    def price(self, new_price: float) -> None:
+        """Сеттер с валидацией для цены товара."""
+        if new_price <= 0:
+            print("Цена не должна быть нулевая или отрицательная")
+            return
+
+        if new_price < self.__price:
+            confirm = input("Цена ниже. Подтвердить изменение? (y/n): ").lower()
+            if confirm != "y":
+                print("Изменение цены отменено.")
+                return
+
+        self.__price = new_price
+
+    @abstractmethod
+    def __str__(self) -> str:
+        """Абстрактный метод строкового представления товара."""
+        pass
+
+    @abstractmethod
+    def __add__(self, other: object) -> int:
+        """Абстрактный метод сложения количества товаров."""
+        pass
+
+
+class CreationLoggerMixin:
+    """Миксин, выводящий в консоль информацию о создании объекта."""
+
+    def __init__(self, *args, **kwargs):
+        cls_name = self.__class__.__name__
+        print(f"Создан объект {cls_name} с параметрами: {args}, {kwargs}")
+        super().__init__(*args, **kwargs)
+
+
+class Product(CreationLoggerMixin, BaseProduct):
     """Класс, описывающий товар."""
 
     def __init__(
