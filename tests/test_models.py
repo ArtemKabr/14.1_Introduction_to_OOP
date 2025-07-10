@@ -12,7 +12,7 @@ def test_product_init(sample_products):
 
 def test_category_init(sample_category):
     assert sample_category.name == "Гаджеты"
-    assert sample_category.products.count("\n") + 1 == 2
+    assert len(sample_category.products) == 2
 
 
 def test_add_product_increases_count(sample_category):
@@ -24,9 +24,12 @@ def test_add_product_increases_count(sample_category):
 
 def test_products_getter_format(sample_category):
     result = sample_category.products
-    assert "Телефон" in result
-    assert "руб." in result
-    assert "Остаток" in result
+    assert any(
+        "Телефон" in product.name or "Телефон" in product.description
+        for product in result
+    )
+    assert any("руб." in str(product) for product in result)
+    assert any("Остаток" in str(product) for product in result)
 
 
 def test_price_setter_valid(monkeypatch):
