@@ -1,5 +1,6 @@
 import os
 
+from src.models import Product
 from src.utils import load_data_from_json  # Убедись, что импорт верный
 
 
@@ -11,5 +12,8 @@ def test_load_data_from_json():
     assert categories[0].name == "Смартфоны"
 
     # проверяем количество строк (товаров) в products
-    product_lines = categories[0].products.strip().split("\n")
-    assert len(product_lines) == 3
+    assert len(categories[0].products) == 3
+
+    # Проверка, что все продукты — экземпляры класса Product
+    for product in categories[0].products:
+        assert isinstance(product, Product)
